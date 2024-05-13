@@ -22,6 +22,13 @@ open class BlurView: UIView {
     }
   }
 
+  /// A field to determine whether the blur is opaque
+  public var opaqueEnabled: Bool = false {
+    didSet {
+        viewModel.opaqueEnabled = opaqueEnabled
+        invalidateIntrinsicContentSize()
+    }
+  }
   private weak var contentView: UIView?
 
   public init(contentView: UIView) {
@@ -60,6 +67,10 @@ private class BlurViewModel: ObservableObject {
 
   @Published
   var blurRadius: CGFloat = 0
+    
+  /// A field to determine whether the blur is opaque
+  @Published
+  var opaqueEnabled: Bool = false
 
 }
 
@@ -92,7 +103,7 @@ private struct BlurredView<Content: View>: View {
 
   var body: some View {
       content()
-      .blur(radius: viewModel.blurRadius)
+          .blur(radius: viewModel.blurRadius, opaque: viewModel.opaqueEnabled)
   }
 }
 
